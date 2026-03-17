@@ -1,39 +1,26 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CanaryTrack | Global Canary Breeding Management Platform",
-  description:
-    "CanaryTrack is a global canary breeding management platform for breeders, aviaries, and clubs. Track birds, pairings, pedigree, production, sales, and expenses in one place.",
   metadataBase: new URL("https://trycanarytrack.com"),
-  openGraph: {
-    title: "CanaryTrack",
-    description:
-      "Global Canary Breeding Management Platform for modern breeders.",
-    url: "https://trycanarytrack.com",
-    siteName: "CanaryTrack",
-    locale: "en_US",
-    type: "website",
+  title: {
+    default: "CanaryTrack",
+    template: "%s | CanaryTrack",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "CanaryTrack",
-    description:
-      "Global Canary Breeding Management Platform for modern breeders.",
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  description: "CanaryTrack",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type Props = {
+  children: ReactNode;
+};
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="min-h-screen bg-slate-950 text-white antialiased">
+        {children}
+      </body>
     </html>
   );
 }

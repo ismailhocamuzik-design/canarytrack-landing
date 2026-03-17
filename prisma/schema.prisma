@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EarlyAccessRole {
+  breeder
+  association_leader
+  federation_representative
+  veterinarian
+  enthusiast
+}
+
+model EarlyAccess {
+  id            String          @id @default(cuid())
+  username      String
+  email         String          @unique
+  countryCode   String
+  role          EarlyAccessRole
+  referralCode  String          @unique
+  referralCount Int             @default(0)
+  waitlistRank  Int?
+  referredByCode String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  referredBy    EarlyAccess?    @relation("EarlyAccessReferrals", fields: [referredByCode], references: [referralCode], onDelete: SetNull, onUpdate: Cascade)
+  referrals     EarlyAccess[]   @relation("EarlyAccessReferrals")
+
+  @@index([countryCode])
+  @@index([role])
+  @@index([createdAt])
+  @@index([waitlistRank])
+  @@index([referredByCode])
+}

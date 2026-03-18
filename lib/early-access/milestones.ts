@@ -119,9 +119,7 @@ export function getNextMilestone(
   );
 }
 
-export function getReferralProgress(
-  referralCount: number,
-): ReferralProgress {
+export function getReferralProgress(referralCount: number): ReferralProgress {
   const normalizedCount = Math.max(0, referralCount);
   const current = getMilestoneByReferralCount(normalizedCount);
   const next = getNextMilestone(normalizedCount);

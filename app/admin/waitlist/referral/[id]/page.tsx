@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { EarlyAccessRole } from "@prisma/client";
 import { prisma } from "../../../../../lib/prisma";
-import { getReferralProgress, getRoleLabel } from "../../../../../lib/early-access/milestones";
-import { getBoostScore, getRankingScore } from "../../../../../lib/early-access/ranking";
+import {
+  getReferralProgress,
+  getRoleLabel,
+} from "../../../../../lib/early-access/milestones";
+import {
+  getBoostScore,
+  getRankingScore,
+} from "../../../../../lib/early-access/ranking";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +17,8 @@ type PageProps = {
     id: string;
   }>;
 };
+
+type RoleLabelParam = Parameters<typeof getRoleLabel>[0];
 
 export default async function ReferralDetailPage({ params }: PageProps) {
   const { id } = await params;
@@ -71,10 +78,10 @@ export default async function ReferralDetailPage({ params }: PageProps) {
 
   const roleDistribution = Array.from(
     entry.referrals.reduce((map, referral) => {
-      const key = referral.role;
+      const key = referral.role as RoleLabelParam;
       map.set(key, (map.get(key) ?? 0) + 1);
       return map;
-    }, new Map<EarlyAccessRole, number>()),
+    }, new Map<RoleLabelParam, number>()),
   ).sort((a, b) => b[1] - a[1]);
 
   return (
@@ -146,7 +153,7 @@ export default async function ReferralDetailPage({ params }: PageProps) {
         <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-slate-500">Role</p>
           <p className="mt-2 text-xl font-bold tracking-tight text-slate-900">
-            {getRoleLabel(entry.role)}
+            {getRoleLabel(entry.role as RoleLabelParam)}
           </p>
         </div>
       </div>
@@ -386,7 +393,7 @@ export default async function ReferralDetailPage({ params }: PageProps) {
                     </td>
 
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
-                      {getRoleLabel(referral.role)}
+                      {getRoleLabel(referral.role as RoleLabelParam)}
                     </td>
 
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
